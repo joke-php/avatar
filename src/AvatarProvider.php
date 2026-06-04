@@ -7,7 +7,7 @@ namespace Vasoft\JokeAvatar;
 use Vasoft\Joke\Config\AbstractConfig;
 use Vasoft\Joke\Config\Environment;
 use Vasoft\Joke\Container\ServiceContainer;
-use Vasoft\Joke\Contract\Container\ContainerInspectionInterface;
+use Vasoft\Joke\Contract\Container\DiContainerInterface;
 use Vasoft\Joke\Contract\Provider\ConfigurableServiceProviderInterface;
 use Vasoft\Joke\Provider\AbstractProvider;
 
@@ -25,10 +25,10 @@ use Vasoft\Joke\Provider\AbstractProvider;
 class AvatarProvider extends AbstractProvider implements ConfigurableServiceProviderInterface
 {
     /**
-     * @param ContainerInspectionInterface $container Контейнер зависимостей (внедряется через DI)
+     * @param DiContainerInterface $container Контейнер зависимостей (внедряется через DI)
      */
     public function __construct(
-        private readonly ContainerInspectionInterface $container,
+        private readonly DiContainerInterface $container,
     ) {}
 
     /**
@@ -61,6 +61,24 @@ class AvatarProvider extends AbstractProvider implements ConfigurableServiceProv
             AvatarGenerator::class,
         ];
     }
+
+    /**
+     * Возвращает список зависимостей от других провайдеров.
+     *
+     * @return array<int, class-string> Список классов провайдеров, от которых зависит данный
+     */
+    public function requires(): array
+    {
+        return [];
+    }
+
+    /**
+     * Выполняет действия после регистрации всех провайдеров.
+     *
+     * Используется для настройки middleware, маршрутов и других действий,
+     * требующих полной инициализации контейнера.
+     */
+    public function boot(): void {}
 
     /**
      * Возвращает список классов конфигурации, предоставляемых провайдером.
