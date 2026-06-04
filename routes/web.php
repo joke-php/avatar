@@ -13,6 +13,20 @@ declare(strict_types=1);
  */
 
 use Vasoft\JokeAvatar\Controller\AvatarController;
+use Vasoft\JokeAvatar\Controller\HealthController;
+
+/*
+ * GET /health
+ *
+ * Эндпоинт для проверки работоспособности сервиса.
+ * Используется Docker HEALTHCHECK и мониторинговыми системами.
+ * Возвращает JSON { "status": "ok", "service": "joke-avatar", "timestamp": "..." }.
+ */
+$router->get(
+    path: '/health',
+    handler: HealthController::class,
+    name: 'avatar.health',
+);
 
 /*
  * GET /avatar/{nickname}

@@ -1,0 +1,38 @@
+# docker-compose.yml
+#
+# Запуск генератора аватаров как микросервиса.
+#
+# Использование:
+#   docker compose up -d          # Запуск в фоне
+#   docker compose logs -f        # Просмотр логов
+#   docker compose down           # Остановка
+#
+# После запуска сервис доступен на http://localhost:8000
+#
+# Примеры запросов:
+#   curl http://localhost:8000/avatar/Alice
+#   curl http://localhost:8000/avatar/Bob?theme=dark
+#   curl http://localhost:8000/health
+
+services:
+  avatar:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: joke-php/avatar:latest
+    container_name: joke-avatar
+    ports:
+      - "8000:8000"
+    volumes:
+      # Кэш сгенерированных аватаров сохраняется между перезапусками
+      - avatar-cache:/app/var/cache/avatars
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+volumes:
+  avatar-cache:

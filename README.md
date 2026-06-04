@@ -99,11 +99,17 @@ src/
 ├── AvatarGenerationException.php # Исключение при ошибках GD
 ├── AvatarGenerator.php           # Бизнес-логика генерации
 ├── AvatarProvider.php            # Сервис-провайдер
+├── SeededRandom.php              # Детерминированный PRNG
 ├── ThemeConfig.php               # Value Object темы оформления
 ├── Controller/
-│   └── AvatarController.php      # Пример контроллера
+│   ├── AvatarController.php      # Контроллер генерации аватара
+│   └── HealthController.php      # Healthcheck для Docker
 └── Http/Response/
     └── ImageResponse.php         # HTTP-ответ с PNG
+docker/
+├── Dockerfile                    # Мультистейдж сборка для микросервиса
+├── docker-compose.yml            # Docker Compose для запуска
+└── entrypoint.sh                 # Точка входа контейнера
 ```
 
 ## Темы оформления
@@ -131,6 +137,97 @@ src/
 - `AvatarException` — базовое исключение модуля (наследует `JokeException`)
 - `AvatarGenerationException` — ошибка при работе с GD (наследует `AvatarException`)
 
+## Docker
+
+Модуль можно запустить как самостоятельный микросервис через Docker.
+
+### Требования
+
+- Docker Engine 24+
+- Docker Compose v2+
+
+### Запуск
+
+```bash
+docker compose -f docker/docker-compose.yml up -d
+```
+
+После запуска сервис доступен на `http://localhost:8000`.
+
+### Примеры запросов
+
+```bash
+# Сгенерировать аватар для Alice
+curl -o alice.png http://localhost:8000/avatar/Alice
+
+# Сгенерировать аватар для Bob в тёмной теме
+curl -o bob.png "http://localhost:8000/avatar/Bob?theme=dark"
+
+# Проверить работоспособность
+curl http://localhost:8000/health
+```
+
+### Смена порта
+
+Если порт 8000 занят, укажите другой через `ports` в `docker-compose.override.yml`:
+
+```yaml
+# docker-compose.override.yml
+services:
+  avatar:
+    ports:
+      - "8080:8000"
+```
+
+После этого сервис будет доступен на `http://localhost:8080`.
+
+### Привязка домена
+
+Для доступа по доменному имени используйте reverse proxy (например, Nginx):
+
+```nginx
+server {
+    listen 80;
+    server_name avatar.example.com;
+
+    location / {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+Либо укажите домен в `docker-compose.override.yml` через сети:
+
+```yaml
+# docker-compose.override.yml
+services:
+  avatar:
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
+```
+
+### Остановка
+
+```bash
+docker compose -f docker/docker-compose.yml down
+```
+
+### Особенности
+
+- Мультистейдж сборка: финальный образ содержит только runtime-зависимости
+- Кэш аватаров сохраняется в Docker volume `avatar-cache`
+- HEALTHCHECK через эндпоинт `/health`
+- Запуск от непривилегированного пользователя `avatar`
+- Для production рекомендуется использовать Nginx в качестве reverse proxy
+
 ## Тестовое приложение
 
 В репозитории доступно тестовое приложение для локальной проверки:
@@ -153,6 +250,9 @@ composer run test
 
 # Запуск dev-сервера
 composer run dev
+
+# Запуск через Docker
+docker compose -f docker/docker-compose.yml up
 ```
 
 ## Генерация кода
