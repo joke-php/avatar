@@ -1,3 +1,8 @@
+# 1.2.1 (2026-06-04)
+
+### Fixes
+- переименование пакета voral/joke-avatar → joke-php/avatar
+
 # 1.2.0 (2026-06-04)
 
 ### New features

@@ -3,7 +3,7 @@
     "description": "Module for the Joke framework for generating avatars based on nickname",
     "type": "library",
     "license": "MIT",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "require": {
         "php": "^8.5",
         "voral/joke": "^1.3",
