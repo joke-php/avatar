@@ -39,6 +39,7 @@ class AvatarController
      */
     public function __invoke(string $nickname): ImageResponse
     {
+        $nickname = rawurldecode($nickname);
         $theme = $this->request->get->getString('theme', '');
         $path = $this->generator->generate($nickname, $theme !== '' ? $theme : null);
 

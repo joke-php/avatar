@@ -39,6 +39,9 @@ class ImageResponse extends BinaryResponse
         $this->headers->set('Content-Length', (string) strlen($this->body));
         $this->headers->set('Content-Disposition', sprintf('inline; filename="%s"', $this->filename));
 
-        return parent::send();
+        $this->sendHeaders();
+        echo $this->getBodyAsString();
+
+        return $this;
     }
 }
