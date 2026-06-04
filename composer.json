@@ -18,27 +18,15 @@
         "dev": "php -S localhost:8000 -t public/",
         "test": "php vendor/bin/phpunit --display-warnings --display-all-issues",
         "cs": "php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --verbose",
-        "cs:dry": "php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --verbose --dry-run"
-    },
-    "scripts-descriptions": {
-        "dev": "Запуск сервера разработки на http://localhost:8000",
-        "test": "Запуск PHPUnit тестов",
-        "cs": "Запуск php-cs-fixer для автоматического исправления кода",
-        "cs:dry": "Запуск php-cs-fixer в режиме проверки без внесения изменений"
-    },
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.95",
-        "phpstan/phpstan": "^2.2",
-        "phpstan/phpstan-phpunit": "^2.0",
-        "phpunit/phpunit": "^13.1"
-    },
-    "scripts": {
-        "dev": "php -S localhost:8000 -t public/",
-        "test": "php vendor/bin/phpunit --display-warnings --display-all-issues",
-        "cs": "php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --verbose",
         "cs:dry": "php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --verbose --dry-run",
         "stan": "php vendor/bin/phpstan analyse --configuration=.phpstan.neon.dist --memory-limit=256M",
-        "stan:ci": "php vendor/bin/phpstan analyse --configuration=.phpstan.neon.dist --memory-limit=256M --no-progress --error-format=github"
+        "stan:ci": "php vendor/bin/phpstan analyse --configuration=.phpstan.neon.dist --memory-limit=256M --no-progress --error-format=github",
+        "vi:major": "php vendor/bin/vs-version-increment major",
+        "vi:minor": "php vendor/bin/vs-version-increment minor",
+        "vi:patch": "php vendor/bin/vs-version-increment patch",
+        "vi:auto": "php vendor/bin/vs-version-increment",
+        "vi:list": "php vendor/bin/vs-version-increment --list",
+        "vi:debug": "php vendor/bin/vs-version-increment --debug"
     },
     "scripts-descriptions": {
         "dev": "Запуск сервера разработки на http://localhost:8000",
@@ -46,6 +34,19 @@
         "cs": "Запуск php-cs-fixer для автоматического исправления кода",
         "cs:dry": "Запуск php-cs-fixer в режиме проверки без внесения изменений",
         "stan": "Запуск PHPStan статического анализа",
-        "stan:ci": "Запуск PHPStan для CI с GitHub форматом ошибок"
+        "stan:ci": "Запуск PHPStan для CI с GitHub форматом ошибок",
+        "vi:major": "Инкремент мажорной версии и обновление CHANGELOG.md",
+        "vi:minor": "Инкремент минорной версии и обновление CHANGELOG.md",
+        "vi:patch": "Инкремент патч версии и обновление CHANGELOG.md",
+        "vi:auto": "Автоматическое определение версии для инкремента и обновление CHANGELOG.md",
+        "vi:list": "Список зарегистрированных типов коммитов и скоупов",
+        "vi:debug": "Автоматическое определение версии для инкремента и обновление CHANGELOG.md без коммита"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "phpstan/phpstan": "^2.2",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpunit/phpunit": "^13.1",
+        "voral/version-increment": "^3.2"
     }
 }
