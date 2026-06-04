@@ -18,8 +18,6 @@ class AvatarConfig extends AbstractConfig
 {
     /**
      * Размер аватара в пикселях (ширина и высота квадрата).
-     *
-     * @var int
      */
     private int $size = 200;
 
@@ -93,8 +91,6 @@ class AvatarConfig extends AbstractConfig
 
     /**
      * Возвращает размер аватара в пикселях.
-     *
-     * @return int
      */
     public function getSize(): int
     {
@@ -147,7 +143,7 @@ class AvatarConfig extends AbstractConfig
      *
      * @param string $themeName Название темы
      *
-     * @return array|null Массив параметров темы или null, если тема не найдена
+     * @return null|array Массив параметров темы или null, если тема не найдена
      */
     public function getTheme(string $themeName): ?array
     {
@@ -158,8 +154,6 @@ class AvatarConfig extends AbstractConfig
      * Проверяет, существует ли тема с указанным именем.
      *
      * @param string $themeName Название темы
-     *
-     * @return bool
      */
     public function hasTheme(string $themeName): bool
     {
