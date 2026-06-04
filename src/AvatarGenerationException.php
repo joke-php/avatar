@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Vasoft\JokeAvatar;
 
-use Throwable;
-
 /**
  * Исключение, выбрасываемое при ошибках генерации изображения аватара.
  *
@@ -18,14 +16,14 @@ use Throwable;
 class AvatarGenerationException extends AvatarException
 {
     /**
-     * @param string         $message  Сообщение об ошибке
-     * @param int            $code     Код ошибки
-     * @param Throwable|null $previous Предыдущее исключение
+     * @param string          $message  Сообщение об ошибке
+     * @param int             $code     Код ошибки
+     * @param null|\Throwable $previous Предыдущее исключение
      */
     public function __construct(
         string $message = 'Ошибка генерации изображения аватара',
         int $code = 0,
-        ?Throwable $previous = null,
+        ?\Throwable $previous = null,
     ) {
         parent::__construct($message, $code, $previous);
     }
