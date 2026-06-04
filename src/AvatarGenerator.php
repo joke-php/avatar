@@ -152,14 +152,10 @@ class AvatarGenerator
             );
         }
 
-        try {
-            $this->drawBackground($image, $size, $theme);
-            $this->drawDecorations($image, $size, $theme);
-            $this->drawText($image, $size, $theme, $nickname);
-            $this->savePng($image, $outputPath);
-        } finally {
-            imagedestroy($image);
-        }
+        $this->drawBackground($image, $size, $theme);
+        $this->drawDecorations($image, $size, $theme);
+        $this->drawText($image, $size, $theme, $nickname);
+        $this->savePng($image, $outputPath);
     }
 
     /**
