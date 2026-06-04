@@ -154,6 +154,12 @@ docker compose -f docker/docker-compose.yml up -d
 
 После запуска сервис доступен на `http://localhost:8000`.
 
+> **Важно:** При использовании флага `-f` Docker Compose **не подхватывает** `docker-compose.override.yml` автоматически.
+> Если вы создали override-файл, указывайте его явно через дополнительный флаг `-f`:
+> ```bash
+> docker compose -f docker/docker-compose.yml -f docker-compose.override.yml up -d
+> ```
+
 ### Примеры запросов
 
 ```bash
@@ -167,9 +173,14 @@ curl -o bob.png "http://localhost:8000/avatar/Bob?theme=dark"
 curl http://localhost:8000/health
 ```
 
+> **Для браузера:** Откройте `http://localhost:8000/avatar/Alice` — сервер вернёт PNG-изображение.
+> Встроенный PHP-сервер может не устанавливать корректный Content-Type для некоторых браузеров,
+> поэтому изображение может отображаться не во всех браузерах. Для гарантированного результата
+> используйте `curl -o avatar.png http://localhost:8000/avatar/Alice`.
+
 ### Смена порта
 
-Если порт 8000 занят, укажите другой через `ports` в `docker-compose.override.yml`:
+Если порт 8000 занят, укажите другой через `docker-compose.override.yml` в корне проекта:
 
 ```yaml
 # docker-compose.override.yml
@@ -177,6 +188,11 @@ services:
   avatar:
     ports:
       - "8080:8000"
+```
+
+Запуск с override-файлом:
+```bash
+docker compose -f docker/docker-compose.yml -f docker-compose.override.yml up -d
 ```
 
 После этого сервис будет доступен на `http://localhost:8080`.
