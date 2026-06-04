@@ -41,7 +41,7 @@ class AvatarController
     {
         $nickname = rawurldecode($nickname);
         $theme = $this->request->get->getString('theme', '');
-        $path = $this->generator->generate($nickname, $theme !== '' ? $theme : null);
+        $path = $this->generator->generate($nickname, '' !== $theme ? $theme : null);
 
         return (new ImageResponse())->load($path);
     }
