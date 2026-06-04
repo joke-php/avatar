@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Vasoft\JokeAvatar;
 
-use Vasoft\JokeAvatar\AvatarException;
-
 /**
  * Value Object, представляющий тему оформления аватара.
  *
