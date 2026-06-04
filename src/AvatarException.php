@@ -13,6 +13,4 @@ use Vasoft\Joke\Exceptions\JokeException;
  * Наследует Vasoft\Joke\Exceptions\JokeException для корректной обработки
  * фреймворком Joke через ExceptionMiddleware.
  */
-class AvatarException extends JokeException
-{
-}
+class AvatarException extends JokeException {}
