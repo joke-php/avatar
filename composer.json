@@ -27,6 +27,24 @@
         "cs:dry": "Запуск php-cs-fixer в режиме проверки без внесения изменений"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.95"
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "phpstan/phpstan": "^2.2",
+        "phpstan/phpstan-phpunit": "^2.0"
+    },
+    "scripts": {
+        "dev": "php -S localhost:8000 -t public/",
+        "test": "php vendor/bin/phpunit --display-warnings --display-all-issues",
+        "cs": "php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --verbose",
+        "cs:dry": "php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --verbose --dry-run",
+        "stan": "php vendor/bin/phpstan analyse --configuration=.phpstan.neon.dist --memory-limit=256M",
+        "stan:ci": "php vendor/bin/phpstan analyse --configuration=.phpstan.neon.dist --memory-limit=256M --no-progress --error-format=github"
+    },
+    "scripts-descriptions": {
+        "dev": "Запуск сервера разработки на http://localhost:8000",
+        "test": "Запуск PHPUnit тестов",
+        "cs": "Запуск php-cs-fixer для автоматического исправления кода",
+        "cs:dry": "Запуск php-cs-fixer в режиме проверки без внесения изменений",
+        "stan": "Запуск PHPStan статического анализа",
+        "stan:ci": "Запуск PHPStan для CI с GitHub форматом ошибок"
     }
 }
