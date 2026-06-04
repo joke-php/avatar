@@ -95,8 +95,8 @@ class AvatarProvider extends AbstractProvider implements ConfigurableServiceProv
     /**
      * Создаёт экземпляр конфигурации AvatarConfig со значениями по умолчанию.
      *
-     * @param string          $configClass Полное имя класса конфигурации
-     * @param ServiceContainer $container  Контейнер зависимостей
+     * @param string           $configClass Полное имя класса конфигурации
+     * @param ServiceContainer $container   Контейнер зависимостей
      *
      * @return AvatarConfig Конфигурация модуля с настройками по умолчанию
      */
