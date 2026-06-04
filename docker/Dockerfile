@@ -31,16 +31,27 @@ LABEL org.opencontainers.image.description="Avatar generation microservice for t
 LABEL org.opencontainers.image.source="https://github.com/joke-php/avatar"
 LABEL org.opencontainers.image.licenses="MIT"
 
-# Установка расширения GD и curl для healthcheck
+# Установка расширения GD (требует -dev пакеты для сборки) и curl для healthcheck
+# После сборки -dev пакеты удаляются, остаются только runtime-библиотеки
 RUN set -eux \
+    && apk add --no-cache \
+        libpng-dev \
+        freetype-dev \
+        libjpeg-turbo-dev \
+        zlib-dev \
+        curl \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j"$(nproc)" gd \
     && apk add --no-cache \
         libpng \
         freetype \
         libjpeg-turbo \
         zlib \
-        curl \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j"$(nproc)" gd
+    && apk del --no-cache \
+        libpng-dev \
+        freetype-dev \
+        libjpeg-turbo-dev \
+        zlib-dev
 
 # Копирование зависимостей из этапа vendor
 COPY --from=vendor /app/vendor/ /app/vendor/
