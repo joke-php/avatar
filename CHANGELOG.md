@@ -1,3 +1,8 @@
+# 1.3.4 (2026-06-04)
+
+### Other changes
+- добавлены export-ignore в .gitattributes
+
 # 1.3.3 (2026-06-04)
 
 ### Documentation
