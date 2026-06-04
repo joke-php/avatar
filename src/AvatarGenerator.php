@@ -42,12 +42,12 @@ class AvatarGenerator
      * Генерирует аватар для указанного никнейма.
      *
      * @param string      $nickname Никнейм пользователя (обязательный параметр)
-     * @param string|null $theme    Название темы оформления (если null или неизвестна — используется 'default')
+     * @param null|string $theme    Название темы оформления (если null или неизвестна — используется 'default')
      *
      * @return string Абсолютный путь к сгенерированному PNG-файлу
      *
-     * @throws AvatarException              Если никнейм пуст
-     * @throws AvatarGenerationException    При ошибках работы GD
+     * @throws AvatarException           Если никнейм пуст
+     * @throws AvatarGenerationException При ошибках работы GD
      */
     public function generate(string $nickname, ?string $theme = null): string
     {
@@ -77,7 +77,7 @@ class AvatarGenerator
     /**
      * Определяет название темы для использования.
      *
-     * @param string|null $theme Переданное название темы
+     * @param null|string $theme Переданное название темы
      *
      * @return string Название темы ('default', если не указана или неизвестна)
      */
@@ -111,7 +111,7 @@ class AvatarGenerator
     private function ensureCacheDirectoryExists(): void
     {
         if (!is_dir($this->cachePath)) {
-            $created = @mkdir($this->cachePath, 0755, true);
+            $created = @mkdir($this->cachePath, 0o755, true);
             if (!$created && !is_dir($this->cachePath)) {
                 throw new AvatarGenerationException(
                     sprintf('Не удалось создать директорию кэша: %s', $this->cachePath),
@@ -389,7 +389,7 @@ class AvatarGenerator
     /**
      * Ищет доступный TrueType-шрифт в системе.
      *
-     * @return string|null Путь к файлу шрифта или null, если шрифт не найден
+     * @return null|string Путь к файлу шрифта или null, если шрифт не найден
      */
     private function findFont(): ?string
     {
