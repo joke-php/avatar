@@ -12,6 +12,8 @@ use Vasoft\JokeAvatar\ThemeConfig;
  * Тесты Value Object ThemeConfig.
  *
  * @covers \Vasoft\JokeAvatar\ThemeConfig
+ *
+ * @internal
  */
 final class ThemeConfigTest extends TestCase
 {

@@ -15,6 +15,8 @@ use Vasoft\JokeAvatar\AvatarGenerator;
  * Тесты сервиса генерации аватаров AvatarGenerator.
  *
  * @covers \Vasoft\JokeAvatar\AvatarGenerator
+ *
+ * @internal
  */
 final class AvatarGeneratorTest extends TestCase
 {
@@ -27,8 +29,8 @@ final class AvatarGeneratorTest extends TestCase
     {
         $this->basePath = sys_get_temp_dir() . '/joke-avatar-test-' . uniqid('', true) . '/';
 
-        $this->config = $this->createStub(AvatarConfig::class);
-        $this->env = $this->createStub(Environment::class);
+        $this->config = self::createStub(AvatarConfig::class);
+        $this->env = self::createStub(Environment::class);
 
         $this->env
             ->method('getBasePath')
@@ -78,11 +80,11 @@ final class AvatarGeneratorTest extends TestCase
 
         $this->config
             ->method('hasTheme')
-            ->willReturnCallback(fn (string $theme): bool => 'default' === $theme);
+            ->willReturnCallback(static fn(string $theme): bool => 'default' === $theme);
 
         $this->config
             ->method('getTheme')
-            ->willReturnCallback(fn (string $theme): ?array => 'default' === $theme ? [
+            ->willReturnCallback(static fn(string $theme): ?array => 'default' === $theme ? [
                 'background_colors' => ['#E8F4F8'],
                 'text_color' => '#2C3E50',
                 'decorative_colors' => ['#BBDEFB'],

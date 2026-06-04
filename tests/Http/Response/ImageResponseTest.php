@@ -6,11 +6,14 @@ namespace Vasoft\JokeAvatar\Tests\Http\Response;
 
 use PHPUnit\Framework\TestCase;
 use Vasoft\JokeAvatar\Http\Response\ImageResponse;
+use Vasoft\Joke\Http\Response\BinaryResponse;
 
 /**
  * Тесты HTTP-ответа ImageResponse.
  *
  * @covers \Vasoft\JokeAvatar\Http\Response\ImageResponse
+ *
+ * @internal
  */
 final class ImageResponseTest extends TestCase
 {
@@ -34,6 +37,6 @@ final class ImageResponseTest extends TestCase
      */
     public function testExtendsBinaryResponse(): void
     {
-        self::assertInstanceOf(\Vasoft\Joke\Http\Response\BinaryResponse::class, $this->response);
+        self::assertInstanceOf(BinaryResponse::class, $this->response);
     }
 }

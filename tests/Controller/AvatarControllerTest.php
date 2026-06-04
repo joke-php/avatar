@@ -15,6 +15,8 @@ use Vasoft\JokeAvatar\Http\Response\ImageResponse;
  * Тесты контроллера AvatarController.
  *
  * @covers \Vasoft\JokeAvatar\Controller\AvatarController
+ *
+ * @internal
  */
 final class AvatarControllerTest extends TestCase
 {
@@ -60,7 +62,7 @@ final class AvatarControllerTest extends TestCase
         $nickname = 'TestUser';
         $pngPath = $this->createTempPng();
 
-        $getCollection = $this->createStub(PropsCollection::class);
+        $getCollection = self::createStub(PropsCollection::class);
         $getCollection
             ->method('getString')
             ->willReturn('');
@@ -89,10 +91,10 @@ final class AvatarControllerTest extends TestCase
         $theme = 'dark';
         $pngPath = $this->createTempPng();
 
-        $getCollection = $this->createStub(PropsCollection::class);
+        $getCollection = self::createStub(PropsCollection::class);
         $getCollection
             ->method('getString')
-            ->willReturnCallback(fn (string $key, string $default = '') => 'theme' === $key ? $theme : $default);
+            ->willReturnCallback(static fn(string $key, string $default = '') => 'theme' === $key ? $theme : $default);
 
         $this->setGetCollection($getCollection);
 
@@ -118,7 +120,7 @@ final class AvatarControllerTest extends TestCase
         $decodedNickname = 'Алексей';
         $pngPath = $this->createTempPng();
 
-        $getCollection = $this->createStub(PropsCollection::class);
+        $getCollection = self::createStub(PropsCollection::class);
         $getCollection
             ->method('getString')
             ->willReturn('');
@@ -146,7 +148,7 @@ final class AvatarControllerTest extends TestCase
         $nickname = 'TestUser';
         $pngPath = $this->createTempPng();
 
-        $getCollection = $this->createStub(PropsCollection::class);
+        $getCollection = self::createStub(PropsCollection::class);
         $getCollection
             ->method('getString')
             ->willReturn('');

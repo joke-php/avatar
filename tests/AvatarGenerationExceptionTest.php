@@ -12,6 +12,8 @@ use Vasoft\JokeAvatar\AvatarGenerationException;
  * Тесты исключения AvatarGenerationException.
  *
  * @covers \Vasoft\JokeAvatar\AvatarGenerationException
+ *
+ * @internal
  */
 final class AvatarGenerationExceptionTest extends TestCase
 {

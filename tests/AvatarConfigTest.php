@@ -11,6 +11,8 @@ use Vasoft\JokeAvatar\AvatarConfig;
  * Тесты конфигурации модуля AvatarConfig.
  *
  * @covers \Vasoft\JokeAvatar\AvatarConfig
+ *
+ * @internal
  */
 final class AvatarConfigTest extends TestCase
 {

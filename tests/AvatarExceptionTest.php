@@ -12,6 +12,8 @@ use Vasoft\JokeAvatar\AvatarException;
  * Тесты базового исключения модуля AvatarException.
  *
  * @covers \Vasoft\JokeAvatar\AvatarException
+ *
+ * @internal
  */
 final class AvatarExceptionTest extends TestCase
 {

@@ -17,6 +17,8 @@ use Vasoft\JokeAvatar\AvatarProvider;
  * Тесты сервис-провайдера AvatarProvider.
  *
  * @covers \Vasoft\JokeAvatar\AvatarProvider
+ *
+ * @internal
  */
 final class AvatarProviderTest extends TestCase
 {
@@ -25,7 +27,7 @@ final class AvatarProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->container = $this->createStub(DiContainerInterface::class);
+        $this->container = self::createStub(DiContainerInterface::class);
         $this->provider = new AvatarProvider($this->container);
     }
 
@@ -83,7 +85,7 @@ final class AvatarProviderTest extends TestCase
      */
     public function testBuildConfigReturnsAvatarConfig(): void
     {
-        $container = $this->createStub(ServiceContainer::class);
+        $container = self::createStub(ServiceContainer::class);
         $config = AvatarProvider::buildConfig(AvatarConfig::class, $container);
 
         self::assertInstanceOf(AvatarConfig::class, $config);
@@ -96,7 +98,7 @@ final class AvatarProviderTest extends TestCase
     public function testRegisterCreatesAvatarGenerator(): void
     {
         $avatarConfig = new AvatarConfig();
-        $env = $this->createStub(Environment::class);
+        $env = self::createStub(Environment::class);
 
         $container = $this->createMock(DiContainerInterface::class);
         $container
@@ -115,7 +117,7 @@ final class AvatarProviderTest extends TestCase
                 AvatarGenerator::class,
                 self::isInstanceOf(\Closure::class),
             )
-            ->willReturnCallback(function (string $class, \Closure $factory) use (&$registeredFactory): void {
+            ->willReturnCallback(static function (string $class, \Closure $factory) use (&$registeredFactory): void {
                 $registeredFactory = $factory;
             });
 
@@ -138,7 +140,7 @@ final class AvatarProviderTest extends TestCase
             ->method('get')
             ->willReturnMap([
                 [AvatarConfig::class, new \stdClass()],
-                [Environment::class, $this->createStub(Environment::class)],
+                [Environment::class, self::createStub(Environment::class)],
             ]);
 
         $registeredFactory = null;
@@ -149,7 +151,7 @@ final class AvatarProviderTest extends TestCase
                 AvatarGenerator::class,
                 self::isInstanceOf(\Closure::class),
             )
-            ->willReturnCallback(function (string $class, \Closure $factory) use (&$registeredFactory): void {
+            ->willReturnCallback(static function (string $class, \Closure $factory) use (&$registeredFactory): void {
                 $registeredFactory = $factory;
             });
 
@@ -185,7 +187,7 @@ final class AvatarProviderTest extends TestCase
                 AvatarGenerator::class,
                 self::isInstanceOf(\Closure::class),
             )
-            ->willReturnCallback(function (string $class, \Closure $factory) use (&$registeredFactory): void {
+            ->willReturnCallback(static function (string $class, \Closure $factory) use (&$registeredFactory): void {
                 $registeredFactory = $factory;
             });
 

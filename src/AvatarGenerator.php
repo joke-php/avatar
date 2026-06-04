@@ -12,13 +12,17 @@ use Vasoft\Joke\Config\Environment;
  * Создаёт квадратное PNG-изображение аватара с использованием расширения GD.
  * Алгоритм:
  * 1. Выбор темы (default, если не указана или неизвестна)
- * 2. Случайный цвет фона из палитры темы
- * 3. Случайные декоративные квадраты поверх фона
+ * 2. Детерминированный выбор цвета фона из палитры темы (на основе seed от никнейма+темы)
+ * 3. Детерминированные декоративные квадраты поверх фона
  * 4. Первые два символа никнейма цветом текста из темы
  * 5. Кэширование результата в var/cache/avatars/
  *
+ * Генерация полностью детерминирована: одинаковый никнейм + тема всегда
+ * дают одинаковое изображение, даже после очистки кэша.
+ *
  * @see AvatarConfig
  * @see ThemeConfig
+ * @see SeededRandom
  */
 class AvatarGenerator
 {
@@ -109,6 +113,20 @@ class AvatarGenerator
     }
 
     /**
+     * Создаёт детерминированный генератор псевдослучайных чисел
+     * на основе комбинации никнейма и темы.
+     *
+     * @param string $nickname Никнейм (уже приведённый к нижнему регистру)
+     * @param string $theme    Название темы
+     *
+     * @return SeededRandom Генератор с seed-значением от никнейма+темы
+     */
+    private function createRandom(string $nickname, string $theme): SeededRandom
+    {
+        return new SeededRandom(mb_strtolower($nickname) . '_' . $theme);
+    }
+
+    /**
      * Создаёт директорию кэша, если она не существует.
      *
      * @throws AvatarGenerationException Если не удалось создать директорию
@@ -152,8 +170,9 @@ class AvatarGenerator
             );
         }
 
-        $this->drawBackground($image, $size, $theme);
-        $this->drawDecorations($image, $size, $theme);
+        $rng = $this->createRandom($nickname, $theme->getTextColor());
+        $this->drawBackground($image, $size, $theme, $rng);
+        $this->drawDecorations($image, $size, $theme, $rng);
         $this->drawText($image, $size, $theme, $nickname);
         $this->savePng($image, $outputPath);
     }
@@ -222,18 +241,19 @@ class AvatarGenerator
     }
 
     /**
-     * Заливает фон аватара случайным цветом из палитры темы.
+     * Заливает фон аватара детерминированным цветом из палитры темы.
      *
-     * @param \GdImage    $image Ресурс изображения GD
-     * @param int         $size  Размер изображения
-     * @param ThemeConfig $theme Тема оформления
+     * @param \GdImage     $image Ресурс изображения GD
+     * @param int          $size  Размер изображения
+     * @param ThemeConfig  $theme Тема оформления
+     * @param SeededRandom $rng   Детерминированный генератор ПСЧ
      *
      * @throws AvatarGenerationException При ошибке выделения цвета
      */
-    private function drawBackground(\GdImage $image, int $size, ThemeConfig $theme): void
+    private function drawBackground(\GdImage $image, int $size, ThemeConfig $theme, SeededRandom $rng): void
     {
         $colors = $theme->getBackgroundColors();
-        $colorHex = $colors[array_rand($colors)];
+        $colorHex = $rng->pick($colors);
         $color = $this->allocateColor($image, $colorHex);
 
         imagefill($image, 0, 0, $color);
@@ -242,30 +262,31 @@ class AvatarGenerator
     /**
      * Рисует декоративные квадраты на аватаре.
      *
-     * Количество и размер квадратов выбираются случайно в диапазонах,
+     * Количество и размер квадратов выбираются детерминированно в диапазонах,
      * заданных в теме. Цвета выбираются из палитры декоративных цветов.
      *
-     * @param \GdImage    $image Ресурс изображения GD
-     * @param int         $size  Размер изображения
-     * @param ThemeConfig $theme Тема оформления
+     * @param \GdImage     $image Ресурс изображения GD
+     * @param int          $size  Размер изображения
+     * @param ThemeConfig  $theme Тема оформления
+     * @param SeededRandom $rng   Детерминированный генератор ПСЧ
      *
      * @throws AvatarGenerationException При ошибке выделения цвета
      */
-    private function drawDecorations(\GdImage $image, int $size, ThemeConfig $theme): void
+    private function drawDecorations(\GdImage $image, int $size, ThemeConfig $theme, SeededRandom $rng): void
     {
-        $count = random_int($theme->getDecorativeMin(), $theme->getDecorativeMax());
+        $count = $rng->nextInt($theme->getDecorativeMin(), $theme->getDecorativeMax());
         $colors = $theme->getDecorativeColors();
 
         for ($i = 0; $i < $count; ++$i) {
-            $decorativeSize = (int) ($size * random_int(
+            $decorativeSize = (int) ($size * $rng->nextInt(
                 $theme->getDecorativeSizeMin(),
                 $theme->getDecorativeSizeMax(),
             ) / 100);
 
-            $x = random_int(0, $size - $decorativeSize);
-            $y = random_int(0, $size - $decorativeSize);
+            $x = $rng->nextInt(0, $size - $decorativeSize);
+            $y = $rng->nextInt(0, $size - $decorativeSize);
 
-            $colorHex = $colors[array_rand($colors)];
+            $colorHex = $rng->pick($colors);
             $color = $this->allocateColor($image, $colorHex);
 
             imagefilledrectangle($image, $x, $y, $x + $decorativeSize, $y + $decorativeSize, $color);
