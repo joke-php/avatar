@@ -1,0 +1,25 @@
+{
+    "name": "voral/joke-avatar",
+    "description": "Модуль для фреймворка Joke по генерации аватаров на основе никнейма",
+    "type": "library",
+    "license": "MIT",
+    "version": "1.0.0",
+    "require": {
+        "php": "^8.5",
+        "voral/joke": "^1.3",
+        "ext-gd": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vasoft\\JokeAvatar\\": "src/"
+        }
+    },
+    "scripts": {
+        "dev": "php -S localhost:8000 -t public/",
+        "test": "php vendor/bin/phpunit --display-warnings --display-all-issues"
+    },
+    "scripts-descriptions": {
+        "dev": "Запуск сервера разработки на http://localhost:8000",
+        "test": "Запуск PHPUnit тестов"
+    }
+}

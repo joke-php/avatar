@@ -1,0 +1,36 @@
+# Настройки атрибутов Git для модуля joke-avatar
+
+# Автоматически нормализовать окончания строк
+* text=auto
+
+# PHP-файлы
+*.php text diff=php
+
+# Markdown
+*.md text diff=markdown
+
+# JSON
+*.json text
+
+# Конфигурационные файлы
+*.yml text
+*.yaml text
+*.neon text
+
+# Изображения (не текстовые)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+
+# Архивы
+*.zip binary
+*.tar.gz binary
+
+# Игнорировать экспорт dev-зависимостей и документации
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/TODO.md export-ignore
+/plans/ export-ignore
+/frm/ export-ignore

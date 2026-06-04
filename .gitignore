@@ -1,0 +1,26 @@
+# Локальная копия фреймворка для анализа
+/frm/
+
+# Зависимости Composer
+/vendor/
+
+# Кэш аватаров
+/var/cache/avatars/
+
+# Логи
+/var/log/
+
+# Файлы окружения
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
