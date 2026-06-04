@@ -8,6 +8,7 @@ RUN set -eux \
         libpng-dev \
         freetype-dev \
         libjpeg-turbo-dev \
+        zlib-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j"$(nproc)" gd
 
@@ -36,6 +37,7 @@ RUN set -eux \
         libpng \
         freetype \
         libjpeg-turbo \
+        zlib \
         curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j"$(nproc)" gd
