@@ -1,3 +1,8 @@
+# 1.1.1 (2026-06-04)
+
+### Other changes
+- translate scripts-descriptions to English
+
 # 1.1.0 (2026-06-04)
 
 ### New features
