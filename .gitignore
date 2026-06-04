@@ -26,3 +26,6 @@ Thumbs.db
 *~
 # Кэш php-cs-fixer
 /var/cache/.php-cs-fixer.cache
+-e 
+# Кэш PHPUnit
+/var/cache/.phpunit.cache/
