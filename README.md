@@ -1,6 +1,6 @@
 # Joke Avatar
 
-Библиотека для генерации квадратных PNG-аватаров на основе никнейма для PHP-фреймворка [Joke](https://github.com/Voral/joke).
+Библиотека для генерации квадратных PNG-аватаров на основе никнейма для PHP-фреймворка [Joke](https://github.com/joke-php/joke).
 
 ## Возможности
 
@@ -17,12 +17,12 @@
 
 - PHP ^8.5
 - PHP-расширение `ext-gd`
-- Фреймворк `voral/joke` ^1.3
+- Фреймворк `joke-php/joke` ^1.3
 
 ## Установка
 
 ```bash
-composer require voral/joke-avatar
+composer require joke-php/avatar
 ```
 
 ## Использование
@@ -157,7 +157,7 @@ composer run dev
 
 ## Генерация кода
 
-Весь исходный код данного модуля полностью создан AI-агентом **SourceCraft Code Assistant** (на базе Claude 3.5 Sonnet) в рамках проекта [Joke](https://github.com/Voral/joke).
+Весь исходный код данного модуля полностью создан AI-агентом **SourceCraft Code Assistant** (на базе Claude 3.5 Sonnet) в рамках проекта [Joke](https://github.com/joke-php/joke).
 
 - **Архитектура и планирование**: AI-агент в режиме Architect
 - **Реализация**: AI-агент в режиме Code

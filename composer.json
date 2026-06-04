@@ -1,5 +1,5 @@
 {
-    "name": "voral/joke-avatar",
+    "name": "joke-php/avatar",
     "description": "Module for the Joke framework for generating avatars based on nickname",
     "type": "library",
     "license": "MIT",
