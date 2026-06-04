@@ -27,8 +27,8 @@ final class AvatarGeneratorTest extends TestCase
     {
         $this->basePath = sys_get_temp_dir() . '/joke-avatar-test-' . uniqid('', true) . '/';
 
-        $this->config = $this->createMock(AvatarConfig::class);
-        $this->env = $this->createMock(Environment::class);
+        $this->config = $this->createStub(AvatarConfig::class);
+        $this->env = $this->createStub(Environment::class);
 
         $this->env
             ->method('getBasePath')

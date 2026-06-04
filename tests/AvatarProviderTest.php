@@ -25,7 +25,7 @@ final class AvatarProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->container = $this->createMock(DiContainerInterface::class);
+        $this->container = $this->createStub(DiContainerInterface::class);
         $this->provider = new AvatarProvider($this->container);
     }
 
@@ -83,7 +83,7 @@ final class AvatarProviderTest extends TestCase
      */
     public function testBuildConfigReturnsAvatarConfig(): void
     {
-        $container = $this->createMock(ServiceContainer::class);
+        $container = $this->createStub(ServiceContainer::class);
         $config = AvatarProvider::buildConfig(AvatarConfig::class, $container);
 
         self::assertInstanceOf(AvatarConfig::class, $config);
@@ -143,6 +143,7 @@ final class AvatarProviderTest extends TestCase
 
         $registeredFactory = null;
         $container
+            ->expects(self::once())
             ->method('registerSingleton')
             ->with(
                 AvatarGenerator::class,
@@ -178,6 +179,7 @@ final class AvatarProviderTest extends TestCase
 
         $registeredFactory = null;
         $container
+            ->expects(self::once())
             ->method('registerSingleton')
             ->with(
                 AvatarGenerator::class,
