@@ -16,10 +16,17 @@
     },
     "scripts": {
         "dev": "php -S localhost:8000 -t public/",
-        "test": "php vendor/bin/phpunit --display-warnings --display-all-issues"
+        "test": "php vendor/bin/phpunit --display-warnings --display-all-issues",
+        "cs": "php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --verbose",
+        "cs:dry": "php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --verbose --dry-run"
     },
     "scripts-descriptions": {
         "dev": "Запуск сервера разработки на http://localhost:8000",
-        "test": "Запуск PHPUnit тестов"
+        "test": "Запуск PHPUnit тестов",
+        "cs": "Запуск php-cs-fixer для автоматического исправления кода",
+        "cs:dry": "Запуск php-cs-fixer в режиме проверки без внесения изменений"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95"
     }
 }
