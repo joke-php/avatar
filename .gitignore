@@ -24,3 +24,5 @@ Thumbs.db
 *.swp
 *.swo
 *~
+# Кэш php-cs-fixer
+/var/cache/.php-cs-fixer.cache
