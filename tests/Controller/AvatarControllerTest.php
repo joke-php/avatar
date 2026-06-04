@@ -48,7 +48,6 @@ final class AvatarControllerTest extends TestCase
         $path = tempnam(sys_get_temp_dir(), 'avatar-test-') . '.png';
         $image = imagecreatetruecolor(10, 10);
         imagepng($image, $path);
-        imagedestroy($image);
 
         return $path;
     }
