@@ -65,7 +65,12 @@ class AvatarGenerator
             return $cacheFile;
         }
 
-        $themeConfig = new ThemeConfig($this->config->getTheme($themeName));
+        $themeData = $this->config->getTheme($themeName);
+        if (null === $themeData) {
+            throw new AvatarException(sprintf('Тема "%s" не найдена', $themeName));
+        }
+
+        $themeConfig = new ThemeConfig($themeData);
         $size = $this->config->getSize();
 
         $this->ensureCacheDirectoryExists();
@@ -132,6 +137,12 @@ class AvatarGenerator
      */
     private function generateImage(int $size, ThemeConfig $theme, string $nickname, string $outputPath): void
     {
+        if ($size < 1) {
+            throw new AvatarGenerationException(
+                sprintf('Некорректный размер изображения: %d', $size),
+            );
+        }
+
         $this->checkAvailableMemory($size);
 
         $image = @imagecreatetruecolor($size, $size);
@@ -185,10 +196,11 @@ class AvatarGenerator
     private function getMemoryLimit(): int
     {
         $limit = ini_get('memory_limit');
-        if (false === $limit || '-1' === $limit) {
+        if ('-1' === $limit) {
             return 0;
         }
 
+        /** @var string $limit */
         return $this->convertToBytes($limit);
     }
 
@@ -354,9 +366,9 @@ class AvatarGenerator
     private function allocateColor(\GdImage $image, string $hex): int
     {
         $hex = ltrim($hex, '#');
-        $r = hexdec(substr($hex, 0, 2));
-        $g = hexdec(substr($hex, 2, 2));
-        $b = hexdec(substr($hex, 4, 2));
+        $r = min(255, max(0, (int) hexdec(substr($hex, 0, 2))));
+        $g = min(255, max(0, (int) hexdec(substr($hex, 2, 2))));
+        $b = min(255, max(0, (int) hexdec(substr($hex, 4, 2))));
 
         $color = @imagecolorallocate($image, $r, $g, $b);
         if (false === $color) {

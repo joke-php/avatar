@@ -143,7 +143,15 @@ class AvatarConfig extends AbstractConfig
      *
      * @param string $themeName Название темы
      *
-     * @return null|array Массив параметров темы или null, если тема не найдена
+     * @return null|array{
+     *     background_colors: list<string>,
+     *     text_color: string,
+     *     decorative_colors: list<string>,
+     *     decorative_min: int,
+     *     decorative_max: int,
+     *     decorative_size_min: int,
+     *     decorative_size_max: int
+     * } Массив параметров темы или null, если тема не найдена
      */
     public function getTheme(string $themeName): ?array
     {

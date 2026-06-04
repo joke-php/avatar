@@ -35,6 +35,10 @@ class ImageResponse extends BinaryResponse
      */
     public function send(): static
     {
+        if (null === $this->headers) {
+            throw new \RuntimeException('Headers collection is not initialized');
+        }
+
         $this->headers->setContentType($this->getContentType());
         $this->headers->set('Content-Length', (string) strlen($this->body));
         $this->headers->set('Content-Disposition', sprintf('inline; filename="%s"', $this->filename));

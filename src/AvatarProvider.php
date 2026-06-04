@@ -45,6 +45,18 @@ class AvatarProvider extends AbstractProvider implements ConfigurableServiceProv
                 $config = $this->container->get(AvatarConfig::class);
                 $env = $this->container->get(Environment::class);
 
+                if (!$config instanceof AvatarConfig) {
+                    throw new \RuntimeException(
+                        sprintf('Ожидался экземпляр %s, получен %s', AvatarConfig::class, get_debug_type($config)),
+                    );
+                }
+
+                if (!$env instanceof Environment) {
+                    throw new \RuntimeException(
+                        sprintf('Ожидался экземпляр %s, получен %s', Environment::class, get_debug_type($env)),
+                    );
+                }
+
                 return new AvatarGenerator($config, $env);
             },
         );
