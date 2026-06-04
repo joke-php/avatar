@@ -1,3 +1,11 @@
+# 1.2.0 (2026-06-04)
+
+### New features
+- детерминированная генерация аватаров через SeededRandom
+
+### Other changes
+- добавлен кэш PHPUnit в .gitignore
+
 # 1.1.1 (2026-06-04)
 
 ### Other changes
