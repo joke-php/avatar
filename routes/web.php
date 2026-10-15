@@ -6,8 +6,7 @@ declare(strict_types=1);
  * Файл маршрутов тестового приложения.
  *
  * Доступные переменные:
- *   - $router (Vasoft\Joke\Routing\Router) — маршрутизатор приложения
- *   - $this   (RouterServiceProvider) — сервис-провайдер маршрутизации
+ * @var  Vasoft\Joke\Routing\Router $router маршрутизатор приложения
  *
  * Маршруты автоматически получают группу 'web' (StdGroup::WEB).
  */

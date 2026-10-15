@@ -136,7 +136,6 @@ final class AvatarControllerTest extends ModuleTestCase
     public function testInvokeDecodesUrlEncodedNickname(): void
     {
         $encodedNickname = '%D0%90%D0%BB%D0%B5%D0%BA%D1%81%D0%B5%D0%B9';
-        $decodedNickname = 'Алексей';
         $pngPath = $this->createTempPng();
 
         $getCollection = self::createStub(PropsCollection::class);
