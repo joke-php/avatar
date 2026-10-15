@@ -33,6 +33,11 @@ final class SeededRandom
         for ($i = 0; $i < 8; ++$i) {
             $this->state = ($this->state << 8) | (ord($hash[$i]) & 0xFF);
         }
+        // LCG Park-Miller требует state в диапазоне [1, m-1].
+        // Исходное 64-битное число из хеша может быть больше m,
+        // что ломает математику Schrage's method и вызывает overflow.
+        $m = 2147483647;
+        $this->state = $this->state % $m;
         // Убеждаемся, что состояние не нулевое (xorshift не работает с 0)
         if (0 === $this->state) {
             $this->state = 0x4A6F6B6541766174; // "JokeAvat" в hex

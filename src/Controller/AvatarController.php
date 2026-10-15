@@ -21,13 +21,14 @@ readonly class AvatarController
 {
     /**
      * @param AvatarGenerator $generator Сервис генерации аватаров
-     * @param HttpRequest     $request   Текущий HTTP-запрос (регистрируется в контейнере перед вызовом контроллера)
+     * @param HttpRequest $request Текущий HTTP-запрос (регистрируется в контейнере перед вызовом контроллера)
      */
     public function __construct(
         private AvatarGenerator $generator,
         private HttpRequest $request,
         private ResponseBuilder $builder,
-    ) {}
+    ) {
+    }
 
     /**
      * Обрабатывает запрос на генерацию аватара.
