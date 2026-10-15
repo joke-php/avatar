@@ -21,7 +21,6 @@ use Vasoft\JokeAvatar\AvatarGenerator;
 final class AvatarGeneratorTest extends ModuleTest
 {
     private AvatarConfig $config;
-    private Environment $env;
     private AvatarGenerator $generator;
 
     protected function setUp(): void

@@ -24,9 +24,9 @@ final class ImageResponseTest extends ModuleTest
     protected function setUp(): void
     {
         $this->makeBase('response');
+        parent::setUp();
         $cookies = new CookieCollection(new CookieConfig(), false);
         $this->response = new ImageResponse($cookies, $this->fs);
-        parent::setUp();
     }
 
     /**
