@@ -10,6 +10,7 @@ use Vasoft\Joke\Container\ServiceContainer;
 use Vasoft\Joke\Contract\Container\DiContainerInterface;
 use Vasoft\Joke\Contract\Provider\ConfigurableServiceProviderInterface;
 use Vasoft\Joke\Provider\AbstractProvider;
+use Vasoft\Joke\Support\FileSystem;
 
 /**
  * Сервис-провайдер модуля генерации аватаров.
@@ -29,7 +30,8 @@ class AvatarProvider extends AbstractProvider implements ConfigurableServiceProv
      */
     public function __construct(
         private readonly DiContainerInterface $container,
-    ) {}
+    ) {
+    }
 
     /**
      * Регистрирует сервисы модуля в DI-контейнере.
@@ -39,27 +41,7 @@ class AvatarProvider extends AbstractProvider implements ConfigurableServiceProv
      */
     public function register(): void
     {
-        $this->container->registerSingleton(
-            AvatarGenerator::class,
-            function (): AvatarGenerator {
-                $config = $this->container->get(AvatarConfig::class);
-                $env = $this->container->get(Environment::class);
-
-                if (!$config instanceof AvatarConfig) {
-                    throw new \RuntimeException(
-                        sprintf('Ожидался экземпляр %s, получен %s', AvatarConfig::class, get_debug_type($config)),
-                    );
-                }
-
-                if (!$env instanceof Environment) {
-                    throw new \RuntimeException(
-                        sprintf('Ожидался экземпляр %s, получен %s', Environment::class, get_debug_type($env)),
-                    );
-                }
-
-                return new AvatarGenerator($config, $env);
-            },
-        );
+        $this->container->registerSingleton(AvatarGenerator::class, AvatarGenerator::class);
     }
 
     /**
@@ -90,7 +72,7 @@ class AvatarProvider extends AbstractProvider implements ConfigurableServiceProv
      * Используется для настройки middleware, маршрутов и других действий,
      * требующих полной инициализации контейнера.
      */
-    public function boot(): void {}
+    public function boot(): void { }
 
     /**
      * Возвращает список классов конфигурации, предоставляемых провайдером.
@@ -107,8 +89,8 @@ class AvatarProvider extends AbstractProvider implements ConfigurableServiceProv
     /**
      * Создаёт экземпляр конфигурации AvatarConfig со значениями по умолчанию.
      *
-     * @param string           $configClass Полное имя класса конфигурации
-     * @param ServiceContainer $container   Контейнер зависимостей
+     * @param string $configClass Полное имя класса конфигурации
+     * @param ServiceContainer $container Контейнер зависимостей
      *
      * @return AvatarConfig Конфигурация модуля с настройками по умолчанию
      */

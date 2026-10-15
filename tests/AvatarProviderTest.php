@@ -23,12 +23,11 @@ use Vasoft\JokeAvatar\AvatarProvider;
 final class AvatarProviderTest extends TestCase
 {
     private AvatarProvider $provider;
-    private DiContainerInterface $container;
 
     protected function setUp(): void
     {
-        $this->container = self::createStub(DiContainerInterface::class);
-        $this->provider = new AvatarProvider($this->container);
+        $container = self::createStub(DiContainerInterface::class);
+        $this->provider = new AvatarProvider($container);
     }
 
     /**
@@ -97,108 +96,28 @@ final class AvatarProviderTest extends TestCase
      */
     public function testRegisterCreatesAvatarGenerator(): void
     {
-        $avatarConfig = new AvatarConfig();
-        $env = self::createStub(Environment::class);
-
         $container = $this->createMock(DiContainerInterface::class);
         $container
-            ->expects(self::exactly(2))
-            ->method('get')
-            ->willReturnMap([
-                [AvatarConfig::class, $avatarConfig],
-                [Environment::class, $env],
-            ]);
-
+            ->expects(self::never())
+            ->method('get');
         $registeredFactory = null;
         $container
             ->expects(self::once())
             ->method('registerSingleton')
             ->with(
                 AvatarGenerator::class,
-                self::isInstanceOf(\Closure::class),
-            )
-            ->willReturnCallback(static function (string $class, \Closure $factory) use (&$registeredFactory): void {
-                $registeredFactory = $factory;
-            });
-
-        $provider = new AvatarProvider($container);
-        $provider->register();
-
-        self::assertNotNull($registeredFactory);
-        $generator = $registeredFactory();
-
-        self::assertInstanceOf(AvatarGenerator::class, $generator);
-    }
-
-    /**
-     * Проверяет, что register выбрасывает RuntimeException при неверном типе AvatarConfig.
-     */
-    public function testRegisterThrowsRuntimeExceptionForInvalidConfig(): void
-    {
-        $container = $this->createMock(DiContainerInterface::class);
-        $container
-            ->method('get')
-            ->willReturnMap([
-                [AvatarConfig::class, new \stdClass()],
-                [Environment::class, self::createStub(Environment::class)],
-            ]);
-
-        $registeredFactory = null;
-        $container
-            ->expects(self::once())
-            ->method('registerSingleton')
-            ->with(
                 AvatarGenerator::class,
-                self::isInstanceOf(\Closure::class),
             )
-            ->willReturnCallback(static function (string $class, \Closure $factory) use (&$registeredFactory): void {
-                $registeredFactory = $factory;
-            });
+            ->willReturnCallback(
+                static function (string $class, string $concrete) use (&$registeredFactory, $container) {
+                    $registeredFactory = $concrete;
+                    return $container;
+                }
+            );
 
         $provider = new AvatarProvider($container);
         $provider->register();
 
         self::assertNotNull($registeredFactory);
-
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Ожидался экземпляр ' . AvatarConfig::class);
-
-        $registeredFactory();
-    }
-
-    /**
-     * Проверяет, что register выбрасывает RuntimeException при неверном типе Environment.
-     */
-    public function testRegisterThrowsRuntimeExceptionForInvalidEnvironment(): void
-    {
-        $container = $this->createMock(DiContainerInterface::class);
-        $container
-            ->method('get')
-            ->willReturnMap([
-                [AvatarConfig::class, new AvatarConfig()],
-                [Environment::class, new \stdClass()],
-            ]);
-
-        $registeredFactory = null;
-        $container
-            ->expects(self::once())
-            ->method('registerSingleton')
-            ->with(
-                AvatarGenerator::class,
-                self::isInstanceOf(\Closure::class),
-            )
-            ->willReturnCallback(static function (string $class, \Closure $factory) use (&$registeredFactory): void {
-                $registeredFactory = $factory;
-            });
-
-        $provider = new AvatarProvider($container);
-        $provider->register();
-
-        self::assertNotNull($registeredFactory);
-
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Ожидался экземпляр ' . Environment::class);
-
-        $registeredFactory();
     }
 }
