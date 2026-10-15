@@ -7,7 +7,6 @@ namespace Vasoft\JokeAvatar\Tests\Http\Response;
 use Vasoft\Joke\Http\Cookies\CookieCollection;
 use Vasoft\Joke\Http\Cookies\CookieConfig;
 use Vasoft\Joke\Http\Response\BinaryResponse;
-use Vasoft\Joke\Support\FileSystem;
 use Vasoft\JokeAvatar\Http\Response\ImageResponse;
 use Vasoft\JokeAvatar\Tests\ModuleTest;
 

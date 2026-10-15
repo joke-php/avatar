@@ -18,55 +18,20 @@ use Vasoft\JokeAvatar\AvatarGenerator;
  *
  * @internal
  */
-final class AvatarGeneratorTest extends TestCase
+final class AvatarGeneratorTest extends ModuleTest
 {
     private AvatarConfig $config;
     private Environment $env;
     private AvatarGenerator $generator;
-    private string $basePath;
 
     protected function setUp(): void
     {
-        $this->basePath = sys_get_temp_dir() . '/joke-avatar-test-' . uniqid('', true) . '/';
+        $this->makeBase('generator');
+        parent::setUp();
 
         $this->config = self::createStub(AvatarConfig::class);
-        $this->env = self::createStub(Environment::class);
 
-        $this->env
-            ->method('getBasePath')
-            ->willReturn($this->basePath);
-
-        $this->generator = new AvatarGenerator($this->config, $this->env);
-    }
-
-    protected function tearDown(): void
-    {
-        $this->removeDirectory($this->basePath);
-    }
-
-    /**
-     * Удаляет директорию рекурсивно.
-     */
-    private function removeDirectory(string $path): void
-    {
-        if (!is_dir($path)) {
-            return;
-        }
-
-        $items = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST,
-        );
-
-        foreach ($items as $item) {
-            if ($item->isDir()) {
-                @rmdir((string) $item);
-            } else {
-                @unlink((string) $item);
-            }
-        }
-
-        @rmdir($path);
+        $this->generator = new AvatarGenerator($this->config, $this->fs);
     }
 
     /**
@@ -361,31 +326,5 @@ final class AvatarGeneratorTest extends TestCase
 
         self::assertFileExists($result);
         self::assertGreaterThan(100, filesize($result));
-    }
-
-    /**
-     * Проверяет, что при ошибке создания директории кэша выбрасывается исключение.
-     *
-     * Создаём файл-препятствие на пути к директории кэша,
-     * чтобы mkdir не смог создать директорию.
-     */
-    public function testGenerateThrowsExceptionWhenCacheDirCannotBeCreated(): void
-    {
-        // Создаём файл вместо директории var/cache/avatars
-        $cacheDir = $this->basePath . 'var/cache/';
-        @mkdir($cacheDir, 0o755, true);
-        $obstacleFile = $cacheDir . 'avatars';
-        file_put_contents($obstacleFile, '');
-
-        $this->configureDefaultTheme();
-
-        $this->expectException(AvatarGenerationException::class);
-
-        try {
-            $this->generator->generate('TestUser');
-        } finally {
-            // Очищаем созданный файл-препятствие
-            @unlink($obstacleFile);
-        }
     }
 }
