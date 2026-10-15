@@ -20,7 +20,6 @@ $container = new ServiceContainer();
 
 $app = new Application(
     basePath: $basePath,
-    routeConfigWeb: '',
     serviceContainer: $container,
 );
 
