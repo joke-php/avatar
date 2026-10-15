@@ -4,24 +4,30 @@ declare(strict_types=1);
 
 namespace Vasoft\JokeAvatar\Tests\Http\Response;
 
-use PHPUnit\Framework\TestCase;
-use Vasoft\JokeAvatar\Http\Response\ImageResponse;
+use Vasoft\Joke\Http\Cookies\CookieCollection;
+use Vasoft\Joke\Http\Cookies\CookieConfig;
 use Vasoft\Joke\Http\Response\BinaryResponse;
+use Vasoft\Joke\Support\FileSystem;
+use Vasoft\JokeAvatar\Http\Response\ImageResponse;
+use Vasoft\JokeAvatar\Tests\ModuleTest;
 
 /**
  * Тесты HTTP-ответа ImageResponse.
  *
- * @covers \Vasoft\JokeAvatar\Http\Response\ImageResponse
+ * @coversDefaultClass \Vasoft\JokeAvatar\Http\Response\ImageResponse
  *
  * @internal
  */
-final class ImageResponseTest extends TestCase
+final class ImageResponseTest extends ModuleTest
 {
     private ImageResponse $response;
 
     protected function setUp(): void
     {
-        $this->response = new ImageResponse();
+        $this->makeBase('response');
+        $cookies = new CookieCollection(new CookieConfig(), false);
+        $this->response = new ImageResponse($cookies, $this->fs);
+        parent::setUp();
     }
 
     /**
