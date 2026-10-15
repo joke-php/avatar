@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Vasoft\JokeAvatar\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Vasoft\Joke\Config\Environment;
 use Vasoft\Joke\Container\ServiceContainer;
 use Vasoft\Joke\Contract\Container\DiContainerInterface;
 use Vasoft\Joke\Contract\Provider\ConfigurableServiceProviderInterface;
@@ -111,8 +110,9 @@ final class AvatarProviderTest extends TestCase
             ->willReturnCallback(
                 static function (string $class, string $concrete) use (&$registeredFactory, $container) {
                     $registeredFactory = $concrete;
+
                     return $container;
-                }
+                },
             );
 
         $provider = new AvatarProvider($container);

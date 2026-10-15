@@ -8,7 +8,7 @@ use Vasoft\Joke\Http\Cookies\CookieCollection;
 use Vasoft\Joke\Http\Cookies\CookieConfig;
 use Vasoft\Joke\Http\Response\BinaryResponse;
 use Vasoft\JokeAvatar\Http\Response\ImageResponse;
-use Vasoft\JokeAvatar\Tests\ModuleTest;
+use Vasoft\JokeAvatar\Tests\ModuleTestCase;
 
 /**
  * Тесты HTTP-ответа ImageResponse.
@@ -17,7 +17,7 @@ use Vasoft\JokeAvatar\Tests\ModuleTest;
  *
  * @internal
  */
-final class ImageResponseTest extends ModuleTest
+final class ImageResponseTest extends ModuleTestCase
 {
     private ImageResponse $response;
 

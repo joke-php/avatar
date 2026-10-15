@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Vasoft\JokeAvatar\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Vasoft\Joke\Config\Environment;
 use Vasoft\JokeAvatar\AvatarConfig;
 use Vasoft\JokeAvatar\AvatarException;
-use Vasoft\JokeAvatar\AvatarGenerationException;
 use Vasoft\JokeAvatar\AvatarGenerator;
 
 /**
@@ -18,7 +15,7 @@ use Vasoft\JokeAvatar\AvatarGenerator;
  *
  * @internal
  */
-final class AvatarGeneratorTest extends ModuleTest
+final class AvatarGeneratorTest extends ModuleTestCase
 {
     private AvatarConfig $config;
     private AvatarGenerator $generator;

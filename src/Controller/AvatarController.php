@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Vasoft\JokeAvatar\Controller;
 
 use Vasoft\Joke\Http\HttpRequest;
+use Vasoft\Joke\Http\Response\ResponseBuilder;
 use Vasoft\JokeAvatar\AvatarGenerator;
 use Vasoft\JokeAvatar\Http\Response\ImageResponse;
 
@@ -16,15 +17,16 @@ use Vasoft\JokeAvatar\Http\Response\ImageResponse;
  *
  * Параметр nickname извлекается из маршрута, theme — из query-параметра.
  */
-class AvatarController
+readonly class AvatarController
 {
     /**
      * @param AvatarGenerator $generator Сервис генерации аватаров
      * @param HttpRequest     $request   Текущий HTTP-запрос (регистрируется в контейнере перед вызовом контроллера)
      */
     public function __construct(
-        private readonly AvatarGenerator $generator,
-        private readonly HttpRequest $request,
+        private AvatarGenerator $generator,
+        private HttpRequest $request,
+        private ResponseBuilder $builder,
     ) {}
 
     /**
@@ -43,6 +45,6 @@ class AvatarController
         $theme = $this->request->get->getString('theme', '');
         $path = $this->generator->generate($nickname, '' !== $theme ? $theme : null);
 
-        return (new ImageResponse())->load($path);
+        return $this->builder->buildResponse(ImageResponse::class)->load($path);
     }
 }

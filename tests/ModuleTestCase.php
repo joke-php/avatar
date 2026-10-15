@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Vasoft\JokeAvatar\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Vasoft\Joke\Support\FileSystem;
 
-abstract class ModuleTest extends TestCase
+abstract class ModuleTestCase extends TestCase
 {
     protected string $basePath = '';
     protected FileSystem $fs;
@@ -21,7 +23,7 @@ abstract class ModuleTest extends TestCase
             '%s/joke-avtr-%s-%s',
             sys_get_temp_dir(),
             $name,
-            uniqid('', true)
+            uniqid('', true),
         );
         @mkdir($this->basePath);
     }
@@ -36,7 +38,7 @@ abstract class ModuleTest extends TestCase
      */
     private function removeDirectory(string $path): void
     {
-        if ($path === '' || !is_dir($path)) {
+        if ('' === $path || !is_dir($path)) {
             return;
         }
 
@@ -47,13 +49,12 @@ abstract class ModuleTest extends TestCase
 
         foreach ($items as $item) {
             if ($item->isDir()) {
-                @rmdir((string)$item);
+                @rmdir((string) $item);
             } else {
-                @unlink((string)$item);
+                @unlink((string) $item);
             }
         }
 
         @rmdir($path);
     }
-
 }

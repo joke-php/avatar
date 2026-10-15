@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Vasoft\JokeAvatar;
 
-use Vasoft\Joke\Config\Environment;
 use Vasoft\Joke\Exceptions\FileSystemException;
 use Vasoft\Joke\Exceptions\OutsideFileException;
 use Vasoft\Joke\Support\FileSystem;
@@ -36,8 +35,9 @@ class AvatarGenerator
 
     /**
      * @param AvatarConfig $config Конфигурация модуля
-     * @param FileSystem $fs Сервис взаимодействия с файловой системой
-     * @throws FileSystemException При ошибках файловой системы
+     * @param FileSystem   $fs     Сервис взаимодействия с файловой системой
+     *
+     * @throws FileSystemException  При ошибках файловой системы
      * @throws OutsideFileException При попытке установить путь за пределами корня проекта
      */
     public function __construct(
@@ -50,8 +50,8 @@ class AvatarGenerator
     /**
      * Генерирует аватар для указанного никнейма.
      *
-     * @param string $nickname Никнейм пользователя (обязательный параметр)
-     * @param null|string $theme Название темы оформления (если null или неизвестна — используется 'default')
+     * @param string      $nickname Никнейм пользователя (обязательный параметр)
+     * @param null|string $theme    Название темы оформления (если null или неизвестна — используется 'default')
      *
      * @return string Абсолютный путь к сгенерированному PNG-файлу
      *
@@ -65,10 +65,9 @@ class AvatarGenerator
         if ('' === $nickname) {
             throw new AvatarException('Никнейм не может быть пустым');
         }
-
         $themeName = $this->resolveThemeName($theme);
         $cacheKey = $this->buildCacheKey($nickname, $themeName);
-        $cacheFile = $this->cachePath . $cacheKey . '.png';
+        $cacheFile = $this->fs->at($this->cachePath, $cacheKey . '.png');
 
         if (file_exists($cacheFile)) {
             return $cacheFile;
@@ -108,7 +107,7 @@ class AvatarGenerator
      * Формирует ключ кэша на основе никнейма и темы.
      *
      * @param string $nickname Никнейм
-     * @param string $theme Название темы
+     * @param string $theme    Название темы
      *
      * @return string MD5-хеш для использования в имени файла
      */
@@ -122,7 +121,7 @@ class AvatarGenerator
      * на основе комбинации никнейма и темы.
      *
      * @param string $nickname Никнейм (уже приведённый к нижнему регистру)
-     * @param string $theme Название темы
+     * @param string $theme    Название темы
      *
      * @return SeededRandom Генератор с seed-значением от никнейма+темы
      */
@@ -151,10 +150,10 @@ class AvatarGenerator
     /**
      * Выполняет генерацию изображения аватара.
      *
-     * @param int $size Размер аватара в пикселях
-     * @param ThemeConfig $theme Конфигурация темы
-     * @param string $nickname Никнейм
-     * @param string $outputPath Путь для сохранения PNG
+     * @param int         $size       Размер аватара в пикселях
+     * @param ThemeConfig $theme      Конфигурация темы
+     * @param string      $nickname   Никнейм
+     * @param string      $outputPath Путь для сохранения PNG
      *
      * @throws AvatarGenerationException При ошибках GD
      */
@@ -201,8 +200,8 @@ class AvatarGenerator
                     'Недостаточно памяти для создания аватара размером %dx%d. Требуется ~%d MB, доступно %d MB',
                     $size,
                     $size,
-                    (int)$requiredMb,
-                    (int)($memoryLimit / 1024 / 1024),
+                    (int) $requiredMb,
+                    (int) ($memoryLimit / 1024 / 1024),
                 ),
             );
         }
@@ -235,23 +234,23 @@ class AvatarGenerator
     {
         $value = trim($value);
         $unit = strtolower($value[strlen($value) - 1]);
-        $number = (int)substr($value, 0, -1);
+        $number = (int) substr($value, 0, -1);
 
         return match ($unit) {
             'g' => $number * 1024 * 1024 * 1024,
             'm' => $number * 1024 * 1024,
             'k' => $number * 1024,
-            default => (int)$value,
+            default => (int) $value,
         };
     }
 
     /**
      * Заливает фон аватара детерминированным цветом из палитры темы.
      *
-     * @param \GdImage $image Ресурс изображения GD
-     * @param int $size Размер изображения
-     * @param ThemeConfig $theme Тема оформления
-     * @param SeededRandom $rng Детерминированный генератор ПСЧ
+     * @param \GdImage     $image Ресурс изображения GD
+     * @param int          $size  Размер изображения
+     * @param ThemeConfig  $theme Тема оформления
+     * @param SeededRandom $rng   Детерминированный генератор ПСЧ
      *
      * @throws AvatarGenerationException При ошибке выделения цвета
      */
@@ -270,10 +269,10 @@ class AvatarGenerator
      * Количество и размер квадратов выбираются детерминированно в диапазонах,
      * заданных в теме. Цвета выбираются из палитры декоративных цветов.
      *
-     * @param \GdImage $image Ресурс изображения GD
-     * @param int $size Размер изображения
-     * @param ThemeConfig $theme Тема оформления
-     * @param SeededRandom $rng Детерминированный генератор ПСЧ
+     * @param \GdImage     $image Ресурс изображения GD
+     * @param int          $size  Размер изображения
+     * @param ThemeConfig  $theme Тема оформления
+     * @param SeededRandom $rng   Детерминированный генератор ПСЧ
      *
      * @throws AvatarGenerationException При ошибке выделения цвета
      */
@@ -283,10 +282,10 @@ class AvatarGenerator
         $colors = $theme->getDecorativeColors();
 
         for ($i = 0; $i < $count; ++$i) {
-            $decorativeSize = (int)($size * $rng->nextInt(
-                    $theme->getDecorativeSizeMin(),
-                    $theme->getDecorativeSizeMax(),
-                ) / 100);
+            $decorativeSize = (int) ($size * $rng->nextInt(
+                $theme->getDecorativeSizeMin(),
+                $theme->getDecorativeSizeMax(),
+            ) / 100);
 
             $x = $rng->nextInt(0, $size - $decorativeSize);
             $y = $rng->nextInt(0, $size - $decorativeSize);
@@ -304,10 +303,10 @@ class AvatarGenerator
      * Текст центрируется по горизонтали и вертикали.
      * Размер шрифта подбирается пропорционально размеру аватара.
      *
-     * @param \GdImage $image Ресурс изображения GD
-     * @param int $size Размер изображения
-     * @param ThemeConfig $theme Тема оформления
-     * @param string $nickname Никнейм
+     * @param \GdImage    $image    Ресурс изображения GD
+     * @param int         $size     Размер изображения
+     * @param ThemeConfig $theme    Тема оформления
+     * @param string      $nickname Никнейм
      *
      * @throws AvatarGenerationException При ошибке выделения цвета
      */
@@ -316,7 +315,7 @@ class AvatarGenerator
         $text = mb_strtoupper(mb_substr($nickname, 0, 2));
         $color = $this->allocateColor($image, $theme->getTextColor());
 
-        $fontSize = (int)($size * 0.4);
+        $fontSize = (int) ($size * 0.4);
         $fontFile = $this->findFont();
 
         if (null !== $fontFile) {
@@ -329,12 +328,12 @@ class AvatarGenerator
     /**
      * Рисует текст с использованием TrueType-шрифта (imagettftext).
      *
-     * @param \GdImage $image Ресурс изображения GD
-     * @param string $text Текст для отображения
-     * @param string $fontFile Путь к файлу шрифта
-     * @param int $fontSize Размер шрифта
-     * @param int $color Цвет (индекс в палитре GD)
-     * @param int $size Размер изображения
+     * @param \GdImage $image    Ресурс изображения GD
+     * @param string   $text     Текст для отображения
+     * @param string   $fontFile Путь к файлу шрифта
+     * @param int      $fontSize Размер шрифта
+     * @param int      $color    Цвет (индекс в палитре GD)
+     * @param int      $size     Размер изображения
      */
     private function drawTrueTypeText(
         \GdImage $image,
@@ -348,8 +347,8 @@ class AvatarGenerator
         if (false !== $bbox) {
             $textWidth = $bbox[2] - $bbox[0];
             $textHeight = $bbox[1] - $bbox[7];
-            $x = (int)(($size - $textWidth) / 2);
-            $y = (int)(($size + $textHeight) / 2);
+            $x = (int) (($size - $textWidth) / 2);
+            $y = (int) (($size + $textHeight) / 2);
 
             @imagettftext($image, $fontSize, 0, $x, $y, $color, $fontFile, $text);
         }
@@ -359,9 +358,9 @@ class AvatarGenerator
      * Рисует текст встроенным GD-шрифтом (без TrueType).
      *
      * @param \GdImage $image Ресурс изображения GD
-     * @param string $text Текст для отображения
-     * @param int $color Цвет (индекс в палитре GD)
-     * @param int $size Размер изображения
+     * @param string   $text  Текст для отображения
+     * @param int      $color Цвет (индекс в палитре GD)
+     * @param int      $size  Размер изображения
      */
     private function drawBuiltinText(\GdImage $image, string $text, int $color, int $size): void
     {
@@ -369,8 +368,8 @@ class AvatarGenerator
         $charWidth = imagefontwidth($font);
         $charHeight = imagefontheight($font);
         $textWidth = mb_strlen($text) * $charWidth;
-        $x = (int)(($size - $textWidth) / 2);
-        $y = (int)(($size - $charHeight) / 2);
+        $x = (int) (($size - $textWidth) / 2);
+        $y = (int) (($size - $charHeight) / 2);
 
         imagestring($image, $font, $x, $y, $text, $color);
     }
@@ -379,7 +378,7 @@ class AvatarGenerator
      * Выделяет цвет в палитре GD из HEX-строки.
      *
      * @param \GdImage $image Ресурс изображения GD
-     * @param string $hex Цвет в HEX-формате (например, '#FF0000' или 'FF0000')
+     * @param string   $hex   Цвет в HEX-формате (например, '#FF0000' или 'FF0000')
      *
      * @return int Индекс цвета в палитре GD
      *
@@ -388,9 +387,9 @@ class AvatarGenerator
     private function allocateColor(\GdImage $image, string $hex): int
     {
         $hex = ltrim($hex, '#');
-        $r = min(255, max(0, (int)hexdec(substr($hex, 0, 2))));
-        $g = min(255, max(0, (int)hexdec(substr($hex, 2, 2))));
-        $b = min(255, max(0, (int)hexdec(substr($hex, 4, 2))));
+        $r = min(255, max(0, (int) hexdec(substr($hex, 0, 2))));
+        $g = min(255, max(0, (int) hexdec(substr($hex, 2, 2))));
+        $b = min(255, max(0, (int) hexdec(substr($hex, 4, 2))));
 
         $color = @imagecolorallocate($image, $r, $g, $b);
         if (false === $color) {
@@ -405,8 +404,8 @@ class AvatarGenerator
     /**
      * Сохраняет изображение в PNG-файл.
      *
-     * @param \GdImage $image Ресурс изображения GD
-     * @param string $outputPath Путь для сохранения
+     * @param \GdImage $image      Ресурс изображения GD
+     * @param string   $outputPath Путь для сохранения
      *
      * @throws AvatarGenerationException При ошибке сохранения
      */
